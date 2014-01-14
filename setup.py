@@ -16,7 +16,6 @@ setup(
     license='LICENSE',
     url='https://github.com/ashchristopher/python-social-auth-waveapps',
     keywords='django social auth oauth2 social-auth waveapps',
-    long_description=read('README.md'),
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Framework :: Django",
