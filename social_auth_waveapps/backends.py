@@ -18,6 +18,13 @@ class WaveAppsOauth2(BaseOAuth2):
     DEFAULT_SCOPE = getattr(settings, 'SOCIAL_AUTH_WAVEAPPS_DEFAULT_SCOPE', ['user.read', ])
 
     def get_redirect_uri(self, state=None):
+        # there is currently a bug in the latest release of python-social-auth
+        # where the SOCIAL_AUTH_REDIRECT_IS_HTTPS settings is not respected so
+        # this makes sure to replace the http:// with https:// if the settings
+        # is True.
+        #
+        # see: https://github.com/omab/python-social-auth/pull/149
+        #
         uri = super(WaveAppsOauth2, self).get_redirect_uri(state)
         if settings.SOCIAL_AUTH_REDIRECT_IS_HTTPS:
             uri = uri.replace('http://', 'https://')
