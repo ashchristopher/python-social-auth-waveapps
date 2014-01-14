@@ -1,7 +1,9 @@
 python-social-auth-waveapps
 ===========================
 
-Authentication backend for python-social-auth. Currently only supports the Django strategy.
+Authentication backend for python-social-auth. 
+
+*Currently only supports the Django strategy.*
 
 ## Installation instructions
 
