@@ -41,6 +41,9 @@ or clone from Github
 
 ## Changelog
 
+### 0.1.0
+* Fixes install problem.
+
 ### 0.0.3
 * Adds the `refresh_token`, `expires_in`, and `token_type` to the `extra_data` the **UserSocialAuth** instance.
 
