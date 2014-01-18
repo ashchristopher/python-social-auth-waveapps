@@ -16,6 +16,11 @@ class WaveAppsOauth2(BaseOAuth2):
     STATE_PARAMETER = True
     REDIRECT_STATE = False  # if this is set to True, we will get this error => "Registered redirect_uri doesn't match provided redirect_uri."
     DEFAULT_SCOPE = getattr(settings, 'SOCIAL_AUTH_WAVEAPPS_DEFAULT_SCOPE', ['user.read', ])
+    EXTRA_DATA = [
+        ('refresh_token', 'refresh_token'),
+        ('expires_in', 'expires'),
+        ('token_type', 'token_type')
+    ]
 
     def get_redirect_uri(self, state=None):
         # there is currently a bug in the latest release of python-social-auth
@@ -34,15 +39,19 @@ class WaveAppsOauth2(BaseOAuth2):
         email = None
         emails = response.get('emails', [])
 
+        # Wave supports multiple emails per user, but only one default email.
         for email_entry in emails:
             if email_entry.get('is_default'):
                 email = email_entry.get('email')
                 break
 
+        # if we can't select the default email, just use the first email in the list
+        # because chances are there was only one email to begin with.
         if email is None:
             email = emails[0].get('email')
 
         user_details = {
+            'username': response.get('id'),  # use Wave's user identifier hash as the username.
             'first_name': response.get('first_name'),
             'last_name': response.get('last_name'),
             'email': email,

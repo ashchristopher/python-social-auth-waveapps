@@ -1,7 +1,7 @@
 python-social-auth-waveapps
 ===========================
 
-Authentication backend for python-social-auth. 
+Pluggable authentication backend for python-social-auth, that allows authentication via WaveApps.
 
 *Currently only supports the Django strategy.*
 
@@ -37,3 +37,12 @@ or clone from Github
         SOCIAL_AUTH_WAVEAPPS_KEY = "..."
         SOCIAL_AUTH_WAVEAPPS_SECRET = "..."
         SOCIAL_AUTH_WAVEAPPS_DEFAULT_SCOPE = ['user.read', ]
+
+
+## Changelog
+
+### 0.0.3
+* Adds the `refresh_token`, `expires_in`, and `token_type` to the `extra_data` the **UserSocialAuth** instance.
+
+### 0.0.1
+* Initial release

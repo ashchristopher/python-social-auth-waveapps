@@ -3,11 +3,12 @@ from setuptools import setup, find_packages
 
 setup(
     name='python-social-auth-waveapps',
-    version='0.0.2',
+    version='0.0.3',
     packages=find_packages(),
     author='Ash Christopher',
     author_email='ash.christopher@gmail.com',
     description='Waveapps backend for python-social-auth.',
+    long_description=open('README.md').read(),
     license='LICENSE',
     url='https://github.com/ashchristopher/python-social-auth-waveapps',
     keywords='django social auth oauth2 social-auth waveapps',
