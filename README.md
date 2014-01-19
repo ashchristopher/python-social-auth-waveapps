@@ -41,6 +41,9 @@ or clone from Github
 
 ## Changelog
 
+### 0.2.0
+* Adds the ability to refresh the access_token using the `refresh_token` method on the backend.
+
 ### 0.1.0
 * Fixes install problem.
 
