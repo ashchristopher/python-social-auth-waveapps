@@ -1,6 +1,7 @@
 from django.conf import settings
 
 from social.backends.oauth import BaseOAuth2
+from social.p3 import urlencode
 
 
 class WaveAppsOauth2(BaseOAuth2):
@@ -31,7 +32,7 @@ class WaveAppsOauth2(BaseOAuth2):
         # see: https://github.com/omab/python-social-auth/pull/149
         #
         uri = super(WaveAppsOauth2, self).get_redirect_uri(state)
-        if settings.SOCIAL_AUTH_REDIRECT_IS_HTTPS:
+        if settings.SOCIAL_AUTH_REDIRECT_IS_HTTPS and uri:
             uri = uri.replace('http://', 'https://')
         return uri
 
@@ -61,3 +62,18 @@ class WaveAppsOauth2(BaseOAuth2):
     def user_data(self, access_token, *args, **kwargs):
         url = "https://api.waveapps.com/user/"
         return self.get_json(url, params={'access_token': access_token})
+
+    def refresh_token(self, token, *args, **kwargs):
+        # python-social-auth doesn't give the right hooks to override just the url when refreshing the token
+        # so we need to copy over the whole method.
+        scope_params = urlencode(self.get_scope_argument())
+        params = self.refresh_token_params(token, *args, **kwargs)
+
+        # Wave's Oauth2 implementation requires that you send the scope as a URL paramater when refreshing the
+        # token - this is a bug in their system.
+        url = '{url}?{params}'.format(url=self.REFRESH_TOKEN_URL or self.ACCESS_TOKEN_URL, params=scope_params)
+        method = self.REFRESH_TOKEN_METHOD
+        key = 'params' if method == 'GET' else 'data'
+        request_args = {'headers': self.auth_headers(), 'method': method, key: params}
+        request = self.request(url, **request_args)
+        return self.process_refresh_token_response(request, *args, **kwargs)
